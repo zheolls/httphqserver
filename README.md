@@ -17,6 +17,7 @@ sudo mv thshqserver /usr/bin
 
 ## 运行
 
+程序需要运行在测试服上
 ```bash
 thshqserver
 ```
