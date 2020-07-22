@@ -11,14 +11,14 @@
 #include <curl/curl.h>
 #include <string>
 #include <iostream>
-
+#include "Log.cpp"
 /// \brief curl回调函数
 
 size_t req_reply(void *ptr, size_t size, size_t nmemb, void *stream)
 {
     std::string *str = (std::string*)stream;
-	std::cout << "Length:"<<(*str).length() << std::endl;
-	(*str).append((char*)ptr, size*nmemb);
+    (*str).append((char*)ptr, size*nmemb);
+    Log("Length:"+std::to_string((*str).length()));
 	return size * nmemb;
 }
 
@@ -60,7 +60,7 @@ void SendPost(const std::string& strPostUrl,const std::string& strPostParams,std
 
     if (res!=CURLE_OK)
     {
-        std::cout<<"Send Request Failed " + std::string(curl_easy_strerror(res))<<std::endl;
+        Log("Send Request Failed " + std::string(curl_easy_strerror(res)));
 
     }
     curl_global_cleanup();

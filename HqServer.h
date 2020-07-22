@@ -17,7 +17,7 @@
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-
+#include "Log.cpp"
 //同花顺股票行情
 class StockHq{
 private:

@@ -32,7 +32,7 @@ void StockHq::HttpServerHandler(evhttp_request *request,void *arg){
     evkeyvalq params;
 	if (buf == NULL) 
 	{
-		printf("evbuffer_new error !\n");
+		Log("evbuffer_new error !");
 		return;
 	}
     const char * url = evhttp_request_uri(request);
@@ -96,7 +96,7 @@ int StockHq::HttpServerBindSocket(int port,int backlog)
 	fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (fd < 0) 
 	{
-		printf("socket error !\n");
+		Log("socket error !");
 		return -1;
 	}
  
@@ -113,7 +113,7 @@ int StockHq::HttpServerBindSocket(int port,int backlog)
 	
 	if (ret < 0 || (ret = listen(fd, backlog)) < 0 )  
 	{	
-		printf("bind error !\n");
+		Log("bind error !");
 		return -1;
 	}
  
@@ -121,7 +121,7 @@ int StockHq::HttpServerBindSocket(int port,int backlog)
 	int SETFlags = fcntl(fd, F_SETFL, GETFlags | O_NONBLOCK);
 	if (GETFlags <0 || SETFlags < 0)
 	{
-		printf("fcntl error !\n");
+		Log("fcntl error !");
 		return -1;
 	}
 	return fd;
@@ -134,24 +134,24 @@ int StockHq::start(){
 	if (fd < 0) 
 	{	
 		return -1;
-		printf("httpserver_bindsocket error !\n");
+		Log("httpserver_bindsocket error !");
 	}
 	struct event_base *base = event_init();
 	if (base == NULL) 
 	{
-		printf("event_init error !\n");
+		Log("event_init error !");
 		return -1;		
 	}
 	struct evhttp *httpd = evhttp_new(base);
 	if (httpd == NULL) 
 	{
-		printf("enhttp_new error !\n");
+		Log("enhttp_new error !");
 		return -1;
 	}
 	ret = evhttp_accept_socket(httpd, fd);
 	if (ret != 0) 
 	{
-		printf("evhttp_accept_socket error \n");
+		Log("evhttp_accept_socket error \n");
 		return -1;
 	}
 	evhttp_set_gencb(httpd, HttpServerHandler, NULL);
