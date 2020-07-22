@@ -9,28 +9,36 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
+//同花顺股票行情
 class StockHq{
 private:
     int time;
     event hqev;
-    event_base * httpbase = event_init();
+    event_base * httpbase;
     timeval tv;
-    int port = 9090;
-    int backlog = 128;
+    int port;
+    int backlog;
 public:
-    void GetHq();
     
-    void SetTimeVal(int us);
+    StockHq(){
+        httpbase = event_init();
+        port = 9090;
+        backlog = 128;
+    }
+    
+    void getHq();
+    //设置event的时间参数
+    void setTimeVal(int s,int us);
 
     static void HttpServerHandler(evhttp_request *request,void *arg);
 
-    void SetPort(int port);
+    void setPort(int port);
 
-    void SetBackLog(int backlog);
+    void setBackLog(int backlog);
 
     int HttpServerBindSocket(int port,int backlog);
 
-    int Start();
+    int start();
     
-    std::string GetParam(std::string param,evkeyvalq params);
+    std::string getParam(std::string param,evkeyvalq params);
 };

@@ -1,18 +1,18 @@
-#include "hq.h"
-#include "util.cpp"
+#include "HqServer.h"
+#include "SendPost.cpp"
 #define HQQUOTAURL "http://10.10.80.140:8080/hexin"
-void StockHq::SetPort(int port){
+void StockHq::setPort(int port){
     this->port = port;
 }
 
-void StockHq::SetBackLog(int backlog){
+void StockHq::setBackLog(int backlog){
     this->backlog = backlog;
 }
-void StockHq::GetHq(){
+void StockHq::getHq(){
 
 }    
-void StockHq::SetTimeVal(int us){
-    this->tv.tv_sec = 0;
+void StockHq::setTimeVal(int s,int us){
+    this->tv.tv_sec = s;
     this->tv.tv_usec = us;
 };
 
@@ -73,7 +73,7 @@ void StockHq::HttpServerHandler(evhttp_request *request,void *arg){
 	evhttp_send_reply(request, 200, "OK", buf);  
 }
 
-std::string StockHq::GetParam(std::string param,evkeyvalq params){
+std::string StockHq::getParam(std::string param,evkeyvalq params){
     std::string result;
     evkeyval * evk = params.tqh_first;
     while (evk){
@@ -129,7 +129,7 @@ int StockHq::HttpServerBindSocket(int port,int backlog){
 	return fd;
 }
 
-int StockHq::Start(){
+int StockHq::start(){
     int ret;
 	int fd = HttpServerBindSocket(this->port, this->backlog);
 	if (fd < 0) 
