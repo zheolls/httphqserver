@@ -21,7 +21,6 @@
 //同花顺股票行情
 class StockHq{
 private:
-    int time;
     event hqev;
     event_base * httpbase;
     timeval tv;

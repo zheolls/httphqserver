@@ -16,6 +16,7 @@ void StockHq::setPort(int port){
 void StockHq::setBackLog(int backlog){
     this->backlog = backlog;
 }
+
 void StockHq::getHq(){
 
 }    
@@ -109,21 +110,16 @@ int StockHq::HttpServerBindSocket(int port,int backlog)
 	addr.sin_port = htons(port);
  
 	ret = bind(fd, (struct sockaddr*)&addr, sizeof(addr));
-	if (ret < 0) 
+	
+	if (ret < 0 || (ret = listen(fd, backlog)) < 0 )  
 	{	
 		printf("bind error !\n");
 		return -1;
 	}
-	ret = listen(fd, backlog);
-	if (ret < 0) 
-	{
-		printf("listen error !\n");
-		return -1;
-	}
  
-	int flags;
-	if ((flags = fcntl(fd, F_GETFL, 0)) < 0
-		|| fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
+	int GETFlags = fcntl(fd, F_GETFL, 0);
+	int SETFlags = fcntl(fd, F_SETFL, GETFlags | O_NONBLOCK);
+	if (GETFlags <0 || SETFlags < 0)
 	{
 		printf("fcntl error !\n");
 		return -1;
