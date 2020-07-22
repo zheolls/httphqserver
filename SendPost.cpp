@@ -16,9 +16,9 @@
 
 size_t req_reply(void *ptr, size_t size, size_t nmemb, void *stream)
 {
-    std::string *str = (std::string*)stream;
-    (*str).append((char*)ptr, size*nmemb);
-    Log("Length:"+std::to_string((*str).length()));
+    // std::string *str = (std::string*)stream;
+    // (*str).append((char*)ptr, size*nmemb);
+    // Log("Length:"+std::to_string((*str).length()));
 	return size * nmemb;
 }
 
