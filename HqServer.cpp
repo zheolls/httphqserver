@@ -1,3 +1,11 @@
+//
+//
+//  Copyright (c)1992-2020,THS Stock CO.LTD.
+//  All Rights Reserved.
+//
+//	Description: 简易股票行情服务，提供同花顺的行情分时数据。
+//	Revisions:		2020-07-21  zhusaihui@myhexin.com
+//
 #include "HqServer.h"
 #include "SendPost.cpp"
 #define HQQUOTAURL "http://10.10.80.140:8080/hexin"
@@ -16,6 +24,8 @@ void StockHq::setTimeVal(int s,int us){
     this->tv.tv_usec = us;
 };
 
+
+
 void StockHq::HttpServerHandler(evhttp_request *request,void *arg){
 	evbuffer *buf = evbuffer_new();
     evkeyvalq params;
@@ -29,54 +39,44 @@ void StockHq::HttpServerHandler(evhttp_request *request,void *arg){
     evhttp_parse_query(url,&params);
 
     evhttp_cmd_type cmdtype = evhttp_request_get_command(request);
-    if (cmdtype == EVHTTP_REQ_GET)
-    {
-        std::cout<<"GET正确"<<std::endl;
-    }
-    else
-    {
-        /* code */
-    }
-    evkeyval * ev = params.tqh_first;
-    while (ev)
-    {
-        std::cout<<"Key:"<<ev->key<<" Value:"<<ev->value<<std::endl;
-        ev = ev->next.tqe_next;
-    }
     
-    //header
-    //X-Arsenal-Auth arsenal-tools
-
-    //params
-    //begintime 20200114 
-    //endtime 20200114
-    //datatype 7,8
-    //codelist 33(300033)
-    //fuquan q
     const char * datetime = evhttp_find_header(&params,"datetime");
     const char * datatype = evhttp_find_header(&params,"datatype");
 
     std::string postresults;
+	
+	/// \param 
+    //datetime 8192(0-0) 
+    //datatype 7,8
+    //codelist 300033
+    //method quote
 
     if (datetime!=0 && datatype!=0)
     {
+		//组装请求参数
         std::string postparmas = "method=quote&code=300033";
         postparmas.append("&datetime=");
 		postparmas.append(datetime);
         postparmas.append("&datatype=");
 		postparmas.append(datatype);
+		//请求并获得应答结果
         SendPost(HQQUOTAURL,postparmas,postresults);
-
     }
     
 	evbuffer_add_printf(buf,postresults.c_str());
+	
+	//向客户端返回结果
 	evhttp_send_reply(request, 200, "OK", buf);  
 }
 
-std::string StockHq::getParam(std::string param,evkeyvalq params){
+
+
+std::string StockHq::getParam(std::string param,evkeyvalq params)
+{
     std::string result;
     evkeyval * evk = params.tqh_first;
-    while (evk){
+    while (evk)
+	{
         if (evk->key==param)
         {
             return evk->value;
@@ -87,7 +87,9 @@ std::string StockHq::getParam(std::string param,evkeyvalq params){
     
 }
 
-int StockHq::HttpServerBindSocket(int port,int backlog){
+
+int StockHq::HttpServerBindSocket(int port,int backlog)
+{
     int ret;
 	int fd;
 	fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -128,6 +130,7 @@ int StockHq::HttpServerBindSocket(int port,int backlog){
 	}
 	return fd;
 }
+
 
 int StockHq::start(){
     int ret;
