@@ -1,6 +1,6 @@
 #include "hq.h"
 #include "util.cpp"
-#define HQQUOTAURL "http://10.10.80.140/hexin"
+#define HQQUOTAURL "http://10.10.80.140:8080/hexin"
 void StockHq::SetPort(int port){
     this->port = port;
 }
@@ -58,11 +58,13 @@ void StockHq::HttpServerHandler(evhttp_request *request,void *arg){
 
     std::string postresults;
 
-    if (datetime!=nullptr && datatype!=nullptr)
+    if (datetime!=0 && datatype!=0)
     {
-        std::string postparmas = "method=quote&code=600000";
-        postparmas.append("&datetime",datetime);
-        postparmas.append("&datatype",datatype);
+        std::string postparmas = "method=quote&code=300033";
+        postparmas.append("&datetime=");
+		postparmas.append(datetime);
+        postparmas.append("&datatype=");
+		postparmas.append(datatype);
         SendPost(HQQUOTAURL,postparmas,postresults);
 
     }

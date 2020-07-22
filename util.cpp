@@ -1,13 +1,19 @@
 #include <curl/curl.h>
 #include <string>
 #include <iostream>
-std::string * req_reply(void * ptr ,size_t size ,size_t nmemb,void *stream){
-    std::string * str = (std::string *)stream;
-    std::cout<<*str<<std::endl;
-    (*str).append((char*)ptr,size*nmemb);
-    return str;
+//std::string  req_reply(void * ptr ,size_t size ,size_t nmemb,void *stream){
+//    std::string str = *((string*)stream);
+//	std::cout<<str<<std::endl;
+//    str.append((char*)ptr,size*nmemb);
+//    return str;
+//}
+size_t req_reply(void *ptr, size_t size, size_t nmemb, void *stream)
+{
+    std::string *str = (std::string*)stream;
+	std::cout << *str << std::endl;
+	(*str).append((char*)ptr, size*nmemb);
+	return size * nmemb;
 }
-
 
 void SendPost(const std::string& strPostUrl,const std::string& strPostParams,std::string& strPostResults){
     curl_global_init(CURL_GLOBAL_ALL);
