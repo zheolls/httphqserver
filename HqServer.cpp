@@ -64,7 +64,7 @@ void StockHq::HttpServerHandler(evhttp_request *request,void *arg){
         SendPost(HQQUOTAURL,postparmas,postresults);
     }
     
-	evbuffer_add_printf(buf,postresults.c_str());
+	evbuffer_add_printf(buf,"%s",postresults.c_str());
 	
 	//向客户端返回结果
 	evhttp_send_reply(request, 200, "OK", buf);  

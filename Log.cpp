@@ -15,21 +15,23 @@
 #include <unistd.h>
 #include <sys/types.h>
 
+const char * hqdir = "/var/log/hq";
+const char * logfile = "var/log/hq/log";
+
 void write(std::string str)
 {
     std::fstream os;
-    if (access("/var/log/hq",0)){
+    if (access(hqdir,0)){
         std::cout<<"dasda";
-        mkdir("/var/log/hq",S_IWGRP);
+        mkdir(hqdir,S_IWGRP);
     }
-    os.open("/var/log/hq/log",std::ios::app);
+    os.open(logfile,std::ios::app);
     os<<str<<std::endl;
 }
 
 void Log(std::string msg)
 {
     time_t  timep;
-    time (&timep);
     char timeStr[64];
     std::string result;
     strftime(timeStr,sizeof(timeStr),"%Y-%m-%d %H:%M:%S",localtime(&timep));
