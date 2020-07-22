@@ -1,12 +1,7 @@
 #include <curl/curl.h>
 #include <string>
 #include <iostream>
-//std::string  req_reply(void * ptr ,size_t size ,size_t nmemb,void *stream){
-//    std::string str = *((string*)stream);
-//	std::cout<<str<<std::endl;
-//    str.append((char*)ptr,size*nmemb);
-//    return str;
-//}
+
 size_t req_reply(void *ptr, size_t size, size_t nmemb, void *stream)
 {
     std::string *str = (std::string*)stream;
